@@ -1,4 +1,4 @@
-module github.com/jangrewe/prometheus-remote-backfill/promdump
+module github.com/knyar/prometheus-remote-backfill/promdump
 
 go 1.12
 

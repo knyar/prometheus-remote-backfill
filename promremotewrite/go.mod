@@ -1,4 +1,4 @@
-module github.com/jangrewe/prometheus-remote-backfill/promremotewrite
+module github.com/knyar/prometheus-remote-backfill/promremotewrite
 
 go 1.12
 
