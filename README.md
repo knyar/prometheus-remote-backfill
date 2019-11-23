@@ -39,3 +39,9 @@ concurrent API requests:
 
     promremotewrite -concurrency=5 \
       -url='http://localhost:8086/api/v1/prom/write?db=prom fs_free.json.*
+
+# Compile
+```
+docker run --rm -v "$PWD/promdump":/promdump -w /promdump golang:1.12 go build
+docker run --rm -v "$PWD/promremotewrite":/promremotewrite -w /promremotewrite golang:1.12 go build
+```
