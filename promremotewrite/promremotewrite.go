@@ -36,14 +36,14 @@ var (
 // converts a slice of SampleStream messages into remote write requests and sends them into the channel.
 func generateWriteRequests(streams []*model.SampleStream, requests chan<- *prompb.WriteRequest) {
 	req := &prompb.WriteRequest{
-		Timeseries: make([]*prompb.TimeSeries, 0, 0),
+		Timeseries: make([]prompb.TimeSeries, 0, 0),
 	}
 
 	totalSamples := uint(0)
 	for _, s := range streams {
-		samples := make([]*prompb.Sample, 0, len(s.Values))
+		samples := make([]prompb.Sample, 0, len(s.Values))
 		for _, v := range s.Values {
-			samples = append(samples, &prompb.Sample{
+			samples = append(samples, prompb.Sample{
 				Value:     float64(v.Value),
 				Timestamp: int64(v.Timestamp),
 			})
@@ -53,12 +53,12 @@ func generateWriteRequests(streams []*model.SampleStream, requests chan<- *promp
 			Labels:  metricToLabelProtos(s.Metric),
 			Samples: samples,
 		}
-		req.Timeseries = append(req.Timeseries, &ts)
+		req.Timeseries = append(req.Timeseries, ts)
 		if totalSamples > *batchSize {
 			log.Printf("Sending batch of %d samples", totalSamples)
 			totalSamples = 0
 			requests <- req
-			req = &prompb.WriteRequest{Timeseries: make([]*prompb.TimeSeries, 0, 0)}
+			req = &prompb.WriteRequest{Timeseries: make([]prompb.TimeSeries, 0, 0)}
 		}
 	}
 
@@ -69,10 +69,10 @@ func generateWriteRequests(streams []*model.SampleStream, requests chan<- *promp
 // metricToLabelProtos builds a []*prompb.Label from a model.Metric
 // Copy/pasted from prometheus/storage/remote/codec.go (can't use it directly
 // because of vendoring in prometheus repo, see prometheus/issues/1720).
-func metricToLabelProtos(metric model.Metric) []*prompb.Label {
-	labels := make([]*prompb.Label, 0, len(metric))
+func metricToLabelProtos(metric model.Metric) []prompb.Label {
+	labels := make([]prompb.Label, 0, len(metric))
 	for k, v := range metric {
-		labels = append(labels, &prompb.Label{
+		labels = append(labels, prompb.Label{
 			Name:  string(k),
 			Value: string(v),
 		})
