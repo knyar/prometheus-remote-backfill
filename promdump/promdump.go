@@ -90,7 +90,7 @@ func main() {
 
 		query := fmt.Sprintf("%s[%ds]", *metric, int64(lookback))
 		log.Printf("Querying %s at %v", query, queryTS)
-		value, err, _ := api.Query(ctx, query, queryTS)
+		value, err := api.Query(ctx, query, queryTS)
                 
 		if err != nil {
 			log.Fatal(err)
